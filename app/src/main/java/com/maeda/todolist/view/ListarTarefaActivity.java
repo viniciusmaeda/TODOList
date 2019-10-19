@@ -22,4 +22,5 @@ public class ListarTarefaActivity extends AppCompatActivity {
                 ListarTarefaActivity.this,
                 CadastrarTarefaActivity.class));
     }
+
 }
