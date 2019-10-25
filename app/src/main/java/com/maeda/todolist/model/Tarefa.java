@@ -1,6 +1,8 @@
 package com.maeda.todolist.model;
 
-public class Tarefa {
+import java.io.Serializable;
+
+public class Tarefa implements Serializable {
 
     private int id;
     private String tarefa;
