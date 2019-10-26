@@ -25,7 +25,6 @@ public class Conexao extends SQLiteOpenHelper {
                 "hora varchar(5))");
     }
 
-
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 

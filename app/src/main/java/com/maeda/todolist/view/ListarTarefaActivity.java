@@ -3,17 +3,53 @@ package com.maeda.todolist.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.maeda.todolist.R;
+import com.maeda.todolist.dao.TarefaDAO;
+import com.maeda.todolist.model.Tarefa;
+
+import java.util.List;
 
 public class ListarTarefaActivity extends AppCompatActivity {
+
+    // objeto que será utilizado para vincular com o componete da Activity
+    ListView listaTarefas;
+
+    // objeto para acessar o BD
+    TarefaDAO tarefaDAO;
+
+    // objeto para listar os registros do BD
+    List<Tarefa> tarefas;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_tarefa);
+
+        // vincular o objeto com o componente
+        listaTarefas = (ListView) findViewById(R.id.listar_tarefa_ltv_tarefas);
+
+        // instanciar objeto que cria conexão com o BD
+        tarefaDAO = new TarefaDAO(this);
+
+        // consultar os registros do BD
+        tarefas = tarefaDAO.obterTarefas();
+
+        // adaptador para atribuir os valores no ListView
+        ArrayAdapter adptador =  new ArrayAdapter<Tarefa>(
+                this,
+                android.R.layout.simple_list_item_1,
+                tarefas
+        );
+
+        // atribuir os valores à ListView
+        listaTarefas.setAdapter(adptador);
+
     }
 
     public void novaTarefa(View view) {

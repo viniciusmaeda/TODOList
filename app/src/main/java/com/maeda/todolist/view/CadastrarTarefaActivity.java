@@ -61,5 +61,4 @@ public class CadastrarTarefaActivity extends AppCompatActivity {
 
     }
 
-
 }
