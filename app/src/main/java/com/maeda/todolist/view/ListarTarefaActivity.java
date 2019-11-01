@@ -2,9 +2,13 @@ package com.maeda.todolist.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -50,6 +54,9 @@ public class ListarTarefaActivity extends AppCompatActivity {
         // atribuir os valores à ListView
         listaTarefas.setAdapter(adptador);
 
+        // registro pra dizer que o menu deve ser criado
+        registerForContextMenu(listaTarefas);
+
     }
 
     public void novaTarefa(View view) {
@@ -57,6 +64,45 @@ public class ListarTarefaActivity extends AppCompatActivity {
         startActivity(new Intent(
                 ListarTarefaActivity.this,
                 CadastrarTarefaActivity.class));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // consultar os registros do BD
+        tarefas = tarefaDAO.obterTarefas();
+
+        // adaptador para atribuir os valores no ListView
+        ArrayAdapter adptador =  new ArrayAdapter<Tarefa>(
+                this,
+                android.R.layout.simple_list_item_1,
+                tarefas
+        );
+
+        // atribuir os valores à ListView
+        listaTarefas.setAdapter(adptador);
+    }
+
+    // método usado para criar o menu de contexto
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater menuInflater = getMenuInflater();
+
+
+        menuInflater.inflate(R.menu.menu_contexto, menu);
+    }
+
+    // método para editar uma tarefa
+    public void editarTarefa(MenuItem item) {
+
+    }
+
+    // método para excluir uma tarefa
+    public void excluirTarefa(MenuItem item) {
+
     }
 
 }
