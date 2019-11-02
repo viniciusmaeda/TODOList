@@ -6,6 +6,7 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -28,7 +29,6 @@ public class ListarTarefaActivity extends AppCompatActivity {
 
     // objeto para listar os registros do BD
     List<Tarefa> tarefas;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +91,25 @@ public class ListarTarefaActivity extends AppCompatActivity {
 
         MenuInflater menuInflater = getMenuInflater();
 
-
         menuInflater.inflate(R.menu.menu_contexto, menu);
     }
 
     // método para editar uma tarefa
     public void editarTarefa(MenuItem item) {
+
+        // obtém o item da lista (ListView) que foi clicado
+        AdapterView.AdapterContextMenuInfo menuInfo =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        // tranformar num objeto do tipo Tarefa
+        Tarefa tarefaEditar = tarefas.get(menuInfo.position);
+
+        // preparar os dados que serão transmitidos para Activity de Cadastro
+        Intent intent = new Intent(this, CadastrarTarefaActivity.class);
+        intent.putExtra("tarefa", tarefaEditar);
+
+        // abre a Activity de Cadastro
+        startActivity(intent);
 
     }
 

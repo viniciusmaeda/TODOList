@@ -2,6 +2,7 @@ package com.maeda.todolist.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -39,25 +40,59 @@ public class CadastrarTarefaActivity extends AppCompatActivity {
         // instanciar o objeto que estabelece a conexão com o BD
         tarefaDAO = new TarefaDAO(this);
 
+        // define um intent para possivelmente resgatar algo
+        Intent intent = getIntent();
+
+        // verificar se veio alguma intent de outra Activity
+        if (intent.hasExtra("tarefa")) {
+            tarefa = (Tarefa) intent.getSerializableExtra("tarefa");
+
+            // preencher os campos do formulário para edição
+            campoTarefa.setText(tarefa.getTarefa());
+            campoDescricao.setText(tarefa.getDescricao());
+            campoData.setText(tarefa.getData());
+            campoHora.setText(tarefa.getHora());
+        }
+
     }
 
     public void salvarTarefa(View view) {
 
-        tarefa = new Tarefa();
+        // verificar se é edição ou novo registro
+        if (tarefa == null) { // novo registro
+            tarefa = new Tarefa();
 
-        // obter os dados do formulários e salvar no objeto
-        tarefa.setTarefa(campoTarefa.getText().toString().trim());
-        tarefa.setDescricao(campoDescricao.getText().toString().trim());
-        tarefa.setData(campoData.getText().toString().trim());
-        tarefa.setHora(campoHora.getText().toString().trim());
+            // obter os dados do formulários e salvar no objeto
+            tarefa.setTarefa(campoTarefa.getText().toString().trim());
+            tarefa.setDescricao(campoDescricao.getText().toString().trim());
+            tarefa.setData(campoData.getText().toString().trim());
+            tarefa.setHora(campoHora.getText().toString().trim());
 
-        // salvar no BD, recebendo o ID da tarefa
-        long id = tarefaDAO.inserirTarefa(tarefa);
+            // salvar no BD, recebendo o ID da tarefa
+            long id = tarefaDAO.inserirTarefa(tarefa);
 
-        // informar o usuário que foi salvo
-        Toast.makeText(this,
-                "Tarefa criada com sucesso. Id: " + id,
-                Toast.LENGTH_LONG).show();
+            // informar o usuário que foi salvo
+            Toast.makeText(this,
+                    "Tarefa criada com sucesso. Id: " + id,
+                    Toast.LENGTH_LONG).show();
+
+        } else { // atualizar registro existente
+
+            // obter os dados do formulários e salvar no objeto
+            tarefa.setTarefa(campoTarefa.getText().toString().trim());
+            tarefa.setDescricao(campoDescricao.getText().toString().trim());
+            tarefa.setData(campoData.getText().toString().trim());
+            tarefa.setHora(campoHora.getText().toString().trim());
+
+            // atualizar os dados no BD
+            tarefaDAO.atualizarTarefa(tarefa);
+
+            // emitir mensagem de sucesso
+            Toast.makeText(this,
+                    "Tarefa atualizada com sucesso!",
+                    Toast.LENGTH_LONG).show();
+
+        }
 
     }
 
