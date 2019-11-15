@@ -1,5 +1,6 @@
 package com.maeda.todolist.view;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.maeda.todolist.R;
@@ -115,6 +117,34 @@ public class ListarTarefaActivity extends AppCompatActivity {
 
     // método para excluir uma tarefa
     public void excluirTarefa(MenuItem item) {
+        // obtém o item da lista (ListView) que foi clicado
+        AdapterView.AdapterContextMenuInfo menuInfo =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        // tranformar num objeto do tipo Tarefa
+        final Tarefa tarefaExclir = tarefas.get(menuInfo.position);
+
+        // caixa de diálogo para confirmar a exclusão
+        AlertDialog dialog = new AlertDialog
+                .Builder(this)
+                .setTitle("Atenção!")
+                .setMessage("Deseja excluir a tarefa?")
+                .setNegativeButton("Não", null)
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // remover da lista das tarefas
+                        tarefas.remove(tarefaExclir);
+                        // remover do BD
+                        tarefaDAO.excluirTarefa(tarefaExclir);
+                        // atualizar a ListView, removendo o item
+                        listaTarefas.invalidateViews();
+                    }
+                }).create();
+
+        // mostrar a caixa de diálogo
+        dialog.show();
+
 
     }
 

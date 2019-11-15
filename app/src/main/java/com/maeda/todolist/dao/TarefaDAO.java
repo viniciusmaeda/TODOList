@@ -70,9 +70,16 @@ public class TarefaDAO {
         return tarefas;
     }
 
-    public void excluirTarefa() {
+    // método para excluir uma tarefa
+    public void excluirTarefa(Tarefa tarefa) {
+        // exclui a tarefa do banco
+        banco.delete(
+                "tarefa",
+                "id = ?",
+                new String[]{String.valueOf(tarefa.getId())});
     }
 
+    // método para atualizar uma tarefa
     public void atualizarTarefa(Tarefa tarefa) {
 
         // objeto contendo os valores para salvar no BD
